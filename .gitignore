@@ -1,0 +1,14 @@
+# Exclude non-website assets
+*.pdf
+*.mp4
+*.docx
+*.mov
+*.zip
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/

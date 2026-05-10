@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ORKA — Cold-Pressed Adaptogen Drinks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; border: 0; font: inherit; vertical-align: baseline; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      color: #F5F0E8;
+      background: #0E0C07;
+      font-family: 'Outfit', Arial, sans-serif;
+      font-feature-settings: "lnum","pnum";
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img, video { display: block; max-width: 100%; }
+
+    /* grain */
+    .grain { position: relative; }
+    .grain::after {
+      content: '';
+      position: absolute; inset: 0;
+      pointer-events: none; z-index: 1;
+      opacity: .28;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(14,12,7,.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(201,168,76,.08);
+      transition: border-color .3s;
+    }
+    .nav-inner {
+      max-width: 1400px; margin: 0 auto; padding: 0 48px;
+      height: 68px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-wordmark {
+      font-size: 14px; font-weight: 500; letter-spacing: .08em;
+      text-transform: uppercase; color: #C9A84C;
+    }
+    .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-size: 11px; font-weight: 500; letter-spacing: .12em;
+      text-transform: uppercase; color: #7A7060; transition: color .2s;
+    }
+    .nav-links a:hover { color: #F5F0E8; }
+
+    .btn-gold {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 24px; background: #C9A84C; color: #0E0C07;
+      font-family: 'Outfit', Arial, sans-serif;
+      font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+      transition: background .15s, transform .1s; cursor: pointer;
+    }
+    .btn-gold:hover { background: #d9ba62; }
+    .btn-gold:active { transform: scale(.97); }
+    .btn-gold:focus-visible { outline: 2px solid #C9A84C; outline-offset: 3px; }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 24px; border: 1px solid rgba(201,168,76,.3); color: #F5F0E8;
+      font-family: 'Outfit', Arial, sans-serif;
+      font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-ghost:hover { border-color: rgba(201,168,76,.7); color: #C9A84C; }
+    .btn-ghost:focus-visible { outline: 2px solid #C9A84C; outline-offset: 3px; }
+
+    /* ── HERO ── */
+    .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+    .hero-vid { position: absolute; inset: 0; z-index: 0; }
+    .hero-vid video { width: 100%; height: 100%; object-fit: cover; opacity: .4; }
+    .hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(105deg, rgba(14,12,7,.88) 0%, rgba(14,12,7,.55) 55%, rgba(14,12,7,.28) 100%);
+    }
+    .hero-body {
+      position: relative; z-index: 2;
+      max-width: 680px;
+      padding: 120px 48px 80px;
+      margin-left: max(48px, calc((100vw - 1400px) / 2 + 48px));
+    }
+    .eyebrow {
+      font-size: 10px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase;
+      color: #C9A84C; margin-bottom: 28px;
+    }
+    .hero-h1 {
+      font-family: 'Outfit', Arial, sans-serif;
+      font-size: clamp(3.6rem, 8.5vw, 7.8rem);
+      font-weight: 500; letter-spacing: .04em; text-transform: uppercase; line-height: .92;
+      color: #F5F0E8; margin-bottom: 14px;
+    }
+    .hero-h1 .gold { color: #C9A84C; }
+    .hero-editorial {
+      font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic;
+      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      color: rgba(245,240,232,.5); line-height: 1.55; margin-bottom: 20px;
+    }
+    .hero-desc { font-size: 16px; color: #7A7060; line-height: 1.7; max-width: 30rem; margin-bottom: 40px; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 56px; }
+    .cert-row {
+      display: flex; flex-wrap: wrap; gap: 28px;
+      padding-top: 32px; border-top: 1px solid rgba(201,168,76,.12);
+    }
+    .cert-pill { display: flex; align-items: center; gap: 8px; }
+    .cert-dot { width: 5px; height: 5px; background: #C9A84C; border-radius: 50%; flex-shrink: 0; }
+    .cert-txt { font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: #7A7060; }
+    .scroll-ind {
+      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); z-index: 2;
+      width: 1px; height: 56px;
+      background: linear-gradient(to bottom, #C9A84C, transparent);
+      animation: spulse 2s ease-in-out infinite;
+    }
+    @keyframes spulse {
+      0%,100% { opacity: .15; transform: translateX(-50%) scaleY(1); }
+      50%      { opacity: .6;  transform: translateX(-50%) scaleY(1.1); }
+    }
+
+    /* ── MARQUEE ── */
+    .mq-bar { background: #C9A84C; padding: 13px 0; overflow: hidden; }
+    .mq-track { display: flex; width: max-content; animation: mq 26s linear infinite; }
+    .mq-track:hover { animation-play-state: paused; }
+    @keyframes mq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .mq-item { display: flex; align-items: center; gap: 40px; padding: 0 40px; white-space: nowrap; }
+    .mq-txt { font-size: 10px; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: #0E0C07; }
+    .mq-sep { color: rgba(14,12,7,.3); font-size: 10px; }
+
+    /* ── RANGE ── */
+    .range-sec { background: #2A2418; padding: 96px 48px 112px; }
+    .range-inner { max-width: 1400px; margin: 0 auto; }
+    .sec-label { font-size: 10px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: #C9A84C; margin-bottom: 18px; }
+    .sec-title {
+      font-family: 'Outfit', Arial, sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 500;
+      letter-spacing: .08em; text-transform: uppercase; line-height: 1.1; color: #F5F0E8; margin-bottom: 8px;
+    }
+    .sec-sub {
+      font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic;
+      font-size: clamp(1rem, 1.8vw, 1.2rem); color: rgba(245,240,232,.45); line-height: 1.6; margin-bottom: 56px;
+    }
+    .range-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: rgba(201,168,76,.08); }
+
+    .p-card {
+      background: #0E0C07; padding: 40px 32px; cursor: pointer;
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s;
+    }
+    .p-card:hover { transform: translateY(-4px); box-shadow: 0 24px 48px rgba(0,0,0,.4), 0 0 0 1px rgba(201,168,76,.15); }
+    .p-card:hover svg { filter: brightness(1.08); }
+    .can-wrap { display: flex; align-items: center; justify-content: center; height: 180px; margin-bottom: 28px; }
+    .p-fn  { font-size: 10px; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: #C9A84C; margin-bottom: 8px; }
+    .p-nm  { font-family: 'Outfit',Arial,sans-serif; font-size: 15px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: #F5F0E8; line-height: 1.3; margin-bottom: 4px; }
+    .p-fl  { font-family: 'Cormorant Garamond',Georgia,serif; font-style: italic; font-size: 15px; color: #7A7060; margin-bottom: 16px; }
+    .p-desc{ font-size: 13px; color: #7A7060; line-height: 1.7; margin-bottom: 28px; }
+    .p-ft  { display: flex; align-items: center; justify-content: space-between; }
+    .p-price{ font-size: 14px; font-weight: 500; color: #F5F0E8; }
+    .p-cta {
+      font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+      color: #C9A84C; background: none; border: none; cursor: pointer; padding: 4px 0; transition: color .2s;
+    }
+    .p-cta:hover { color: #F5F0E8; }
+    .p-cta:focus-visible { outline: 1px solid #C9A84C; outline-offset: 2px; }
+
+    /* ── ABOUT ── */
+    .about-sec { background: #0E0C07; padding: 96px 48px; position: relative; overflow: hidden; }
+    .about-glow {
+      position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(ellipse at right, rgba(201,168,76,.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .about-grid { max-width: 1400px; margin: 0 auto; position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .about-h2 {
+      font-family: 'Outfit',Arial,sans-serif; font-size: clamp(2rem,4vw,3rem);
+      font-weight: 500; letter-spacing: .06em; text-transform: uppercase; line-height: 1.05; color: #F5F0E8; margin-bottom: 12px;
+    }
+    .about-ed {
+      font-family: 'Cormorant Garamond',Georgia,serif; font-style: italic;
+      font-size: 1.2rem; color: rgba(245,240,232,.45); line-height: 1.55; margin-bottom: 28px;
+    }
+    .about-p { font-size: 16px; color: #7A7060; line-height: 1.7; margin-bottom: 20px; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; margin-top: 40px; }
+    .stat { padding: 20px 0; border-top: 1px solid rgba(201,168,76,.15); }
+    .stat-n { font-family:'Outfit',Arial,sans-serif; font-size:1.75rem; font-weight:500; letter-spacing:.08em; color:#C9A84C; margin-bottom:4px; }
+    .stat-l { font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#7A7060; }
+
+    .logo-panel {
+      position: relative; aspect-ratio: 1; background: #2A2418;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 80px rgba(201,168,76,.04), inset 0 1px 0 rgba(201,168,76,.1);
+    }
+    .c { position: absolute; width: 28px; height: 28px; }
+    .c-tl { top:20px; left:20px; border-top:1px solid rgba(201,168,76,.3); border-left:1px solid rgba(201,168,76,.3); }
+    .c-tr { top:20px; right:20px; border-top:1px solid rgba(201,168,76,.3); border-right:1px solid rgba(201,168,76,.3); }
+    .c-bl { bottom:20px; left:20px; border-bottom:1px solid rgba(201,168,76,.3); border-left:1px solid rgba(201,168,76,.3); }
+    .c-br { bottom:20px; right:20px; border-bottom:1px solid rgba(201,168,76,.3); border-right:1px solid rgba(201,168,76,.3); }
+    .logo-panel img { width: 62%; opacity: .55; }
+    .pull-q {
+      position: absolute; bottom: -28px; left: -20px;
+      background: #C9A84C; padding: 18px 22px; max-width: 260px;
+      box-shadow: 0 16px 40px rgba(0,0,0,.4);
+    }
+    .pull-q p { font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: #0E0C07; line-height: 1.6; }
+
+    /* ── SCIENCE ── */
+    .sci-sec { background: #2A2418; padding: 96px 48px; }
+    .sci-inner { max-width: 1400px; margin: 0 auto; }
+    .sci-hdr { text-align: center; margin-bottom: 56px; }
+    .sci-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(201,168,76,.07); }
+    .pillar { background: #0E0C07; padding: 40px 36px; }
+    .p-icon { width:40px; height:40px; border:1px solid rgba(201,168,76,.3); border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:24px; }
+    .p-title { font-family:'Outfit',Arial,sans-serif; font-size:13px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:#F5F0E8; margin-bottom:12px; }
+    .p-body { font-size:14px; color:#7A7060; line-height:1.7; }
+
+    /* ── CERT STRIP ── */
+    .cert-sec { background:#0E0C07; border-top:1px solid rgba(201,168,76,.07); border-bottom:1px solid rgba(201,168,76,.07); padding:48px; }
+    .cert-inner { max-width:1400px; margin:0 auto; display:grid; grid-template-columns:repeat(5,1fr); gap:24px; }
+    .badge { display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center; }
+    .b-icon { width:40px; height:40px; border:1px solid rgba(201,168,76,.2); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .b-lbl { font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#7A7060; }
+
+    /* ── BOTTOM CTA ── */
+    .bcta { background:#0E0C07; padding:140px 48px; text-align:center; position:relative; overflow:hidden; }
+    .bcta-glow { position:absolute; inset:0; background:radial-gradient(ellipse at 50% 50%, rgba(201,168,76,.07) 0%, transparent 60%); pointer-events:none; }
+    .bcta-inner { max-width:600px; margin:0 auto; position:relative; z-index:2; }
+    .bcta-logo { height:52px; width:auto; margin:0 auto 32px; opacity:.65; }
+    .bcta-h { font-family:'Outfit',Arial,sans-serif; font-size:clamp(1.8rem,4vw,2.8rem); font-weight:500; letter-spacing:.06em; text-transform:uppercase; line-height:1.1; color:#F5F0E8; margin-bottom:12px; }
+    .bcta-sub { font-family:'Cormorant Garamond',Georgia,serif; font-style:italic; font-size:1.2rem; color:rgba(245,240,232,.4); margin-bottom:40px; }
+
+    /* ── FOOTER ── */
+    .footer { background:#2A2418; border-top:1px solid rgba(201,168,76,.08); padding:48px; }
+    .foot-inner { max-width:1400px; margin:0 auto; }
+    .foot-top { display:flex; align-items:center; justify-content:space-between; padding-bottom:32px; border-bottom:1px solid rgba(201,168,76,.07); margin-bottom:24px; flex-wrap:wrap; gap:24px; }
+    .foot-nav { display:flex; gap:32px; list-style:none; flex-wrap:wrap; }
+    .foot-nav a { font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:#7A7060; transition:color .2s; }
+    .foot-nav a:hover { color:#C9A84C; }
+    .foot-tag { font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:#7A7060; }
+    .foot-btm { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+    .foot-copy { font-size:12px; color:rgba(122,112,96,.45); }
+    .foot-legal { display:flex; gap:24px; list-style:none; }
+    .foot-legal a { font-size:12px; color:rgba(122,112,96,.45); transition:color .2s; }
+    .foot-legal a:hover { color:#7A7060; }
+
+    /* ── GLOW CARD BORDER ── */
+    @keyframes card-glow-pulse {
+      0%, 100% { box-shadow: 0 0 8px 2px rgba(201,168,76,.35), 0 0 24px 4px rgba(201,168,76,.14); }
+      50%       { box-shadow: 0 0 14px 3px rgba(201,168,76,.55), 0 0 36px 6px rgba(201,168,76,.22); }
+    }
+    .p-card[data-glow] {
+      border: 1px solid rgba(201,168,76,.55);
+      animation: card-glow-pulse 3s ease-in-out infinite;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){
+      .nav-inner { padding:0 24px; }
+      .nav-links { display:none; }
+      .hero-body { padding:96px 24px 72px; margin-left:0; max-width:100%; }
+      .range-sec { padding:64px 24px 80px; }
+      .range-grid { grid-template-columns:1fr 1fr; }
+      .about-sec { padding:64px 24px; }
+      .about-grid { grid-template-columns:1fr; gap:56px; }
+      .logo-panel { display:none; }
+      .sci-sec { padding:64px 24px; }
+      .sci-grid { grid-template-columns:1fr; }
+      .cert-sec { padding:40px 24px; }
+      .cert-inner { grid-template-columns:repeat(3,1fr); }
+      .bcta { padding:96px 24px; }
+      .footer { padding:40px 24px 32px; }
+      .foot-top { flex-direction:column; align-items:flex-start; }
+      .foot-btm { flex-direction:column; align-items:flex-start; }
+    }
+    @media(max-width:560px){
+      .range-grid { grid-template-columns:1fr; }
+      .cert-inner { grid-template-columns:repeat(2,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ══════════════════════════════════════════════════════ -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo" aria-label="Orka home">
+      <svg width="28" height="28" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <circle cx="20" cy="20" r="11" stroke="#C9A84C" stroke-width="1.5"/>
+        <circle cx="20" cy="20" r="5.5" fill="#C9A84C"/>
+        <line x1="20" y1="4"  x2="20" y2="9"  stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="20" y1="31" x2="20" y2="36" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="4"  y1="20" x2="9"  y2="20" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="31" y1="20" x2="36" y2="20" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span class="nav-wordmark">Orka</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#range">The Range</a></li>
+      <li><a href="#story">Our Story</a></li>
+      <li><a href="#science">The Science</a></li>
+    </ul>
+    <a href="#range" class="btn-gold" style="padding:10px 22px;">
+      Shop the Range
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+    </a>
+  </div>
+</header>
+
+
+<!-- ══ HERO ══════════════════════════════════════════════════════ -->
+<section class="hero grain">
+  <div class="hero-vid">
+    <video autoplay muted loop playsinline preload="metadata">
+      <source src="orka drink.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-overlay" aria-hidden="true"></div>
+
+  <div class="hero-body">
+    <p class="eyebrow">Cold-Pressed &nbsp;·&nbsp; Single-Origin &nbsp;·&nbsp; Certified Organic</p>
+    <h1 class="hero-h1">Drink with<br><span class="gold">intention.</span></h1>
+    <p class="hero-editorial">Four adaptogens. Four functions. No noise.</p>
+    <p class="hero-desc">A range of cold-pressed adaptogen drinks crafted for people who take what they put in their body as seriously as what they put on it. Single-origin. No compromises.</p>
+    <div class="cta-row">
+      <a href="#range" class="btn-gold" style="padding:14px 28px; font-size:12px;">
+        Shop the Range
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+      <a href="#science" class="btn-ghost" style="padding:14px 28px; font-size:12px;">The Science Behind It</a>
+    </div>
+    <div class="cert-row">
+      <div class="cert-pill"><span class="cert-dot"></span><span class="cert-txt">No Refined Sugar</span></div>
+      <div class="cert-pill"><span class="cert-dot"></span><span class="cert-txt">Single-Origin</span></div>
+      <div class="cert-pill"><span class="cert-dot"></span><span class="cert-txt">Certified Organic</span></div>
+      <div class="cert-pill"><span class="cert-dot"></span><span class="cert-txt">Vegan &amp; Gluten-Free</span></div>
+    </div>
+  </div>
+  <div class="scroll-ind" aria-hidden="true"></div>
+</section>
+
+
+<!-- ══ MARQUEE ══════════════════════════════════════════════════ -->
+<div class="mq-bar" aria-hidden="true">
+  <div class="mq-track">
+    <div class="mq-item"><span class="mq-txt">Every ingredient earns its place.</span><span class="mq-sep">✦</span><span class="mq-txt">Cold-Pressed &amp; Traceable</span><span class="mq-sep">✦</span><span class="mq-txt">£6.50 per unit</span><span class="mq-sep">✦</span><span class="mq-txt">Single-Origin Adaptogens</span><span class="mq-sep">✦</span></div>
+    <div class="mq-item"><span class="mq-txt">Every ingredient earns its place.</span><span class="mq-sep">✦</span><span class="mq-txt">Cold-Pressed &amp; Traceable</span><span class="mq-sep">✦</span><span class="mq-txt">£6.50 per unit</span><span class="mq-sep">✦</span><span class="mq-txt">Single-Origin Adaptogens</span><span class="mq-sep">✦</span></div>
+  </div>
+</div>
+
+
+<!-- ══ THE RANGE ════════════════════════════════════════════════ -->
+<section id="range" class="range-sec">
+  <div class="range-inner">
+    <div style="max-width:560px; margin-bottom:56px;">
+      <p class="sec-label">The Range</p>
+      <h2 class="sec-title">Four Functions.<br>One Standard.</h2>
+      <p class="sec-sub">Each formula built around a single-origin adaptogen — traceable to farm level.</p>
+    </div>
+
+    <div class="range-grid">
+
+      <!-- FOCUS -->
+      <article class="p-card" data-glow>
+        <div class="can-wrap">
+          <svg width="88" height="176" viewBox="0 0 88 176" fill="none" style="transition:filter .3s;">
+            <rect x="8" y="24" width="72" height="128" rx="5" fill="#111008"/>
+            <rect x="8" y="24" width="18" height="128" rx="5" fill="url(#sf)" opacity=".12"/>
+            <ellipse cx="44" cy="24" rx="36" ry="8" fill="#1e1b12"/>
+            <ellipse cx="44" cy="152" rx="36" ry="8" fill="#1e1b12"/>
+            <rect x="8" y="24" width="72" height="2.5" fill="#C9A84C" opacity=".9"/>
+            <rect x="8" y="149.5" width="72" height="2.5" fill="#C9A84C" opacity=".9"/>
+            <rect x="8" y="68" width="72" height="2.5" fill="#B8C44C" opacity=".7" rx="1"/>
+            <text x="44" y="52" text-anchor="middle" fill="#C9A84C" font-size="7.5" font-weight="500" font-family="Outfit,sans-serif" letter-spacing="3">ORKA</text>
+            <text x="44" y="100" text-anchor="middle" fill="#F5F0E8" font-size="13" font-weight="500" font-family="Outfit,sans-serif" letter-spacing="2">FOCUS</text>
+            <text x="44" y="115" text-anchor="middle" fill="#7A7060" font-size="5.5" font-family="Outfit,sans-serif" letter-spacing="1">LION'S MANE &amp; YUZU</text>
+            <circle cx="44" cy="135" r="5" fill="none" stroke="#C9A84C" stroke-width=".8" opacity=".5"/>
+            <circle cx="44" cy="135" r="2.5" fill="#C9A84C" opacity=".6"/>
+            <line x1="44" y1="128" x2="44" y2="126" stroke="#C9A84C" stroke-width=".8" opacity=".4"/>
+            <line x1="44" y1="142" x2="44" y2="144" stroke="#C9A84C" stroke-width=".8" opacity=".4"/>
+            <line x1="37" y1="135" x2="35" y2="135" stroke="#C9A84C" stroke-width=".8" opacity=".4"/>
+            <line x1="51" y1="135" x2="53" y2="135" stroke="#C9A84C" stroke-width=".8" opacity=".4"/>
+            <defs><linearGradient id="sf" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="white" stop-opacity=".8"/><stop offset="100%" stop-color="white" stop-opacity="0"/></linearGradient></defs>
+          </svg>
+        </div>
+        <p class="p-fn">Focus</p>
+        <h3 class="p-nm">Lion's Mane &amp; Yuzu</h3>
+        <p class="p-fl">Citrus / Earthy</p>
+        <p class="p-desc">Clarity and cognition. Bright citrus meets earthy mushroom for clean mental performance.</p>
+        <div class="p-ft"><span class="p-price">£6.50</span><button class="p-cta">Add to Bag →</button></div>
+      </article>
+
+      <!-- CALM -->
+      <article class="p-card" data-glow>
+        <div class="can-wrap">
+          <svg width="88" height="176" viewBox="0 0 88 176" fill="none" style="transition:filter .3s;">
+            <rect x="8" y="24" width="72" height="128" rx="5" fill="#111008"/>
+            <rect x="8" y="24" width="18" height="128" rx="5" fill="url(#sc)" opacity=".12"/>
+            <ellipse cx="44" cy="24" rx="36" ry="8" fill="#1e1b12"/>
+            <ellipse cx="44" cy="152" rx="36" ry="8" fill="#1e1b12"/>
+            <rect x="8" y="24" width="72" height="2.5" fill="#C9A84C" opacity=".9"/>
+            <rect x="8" y="149.5" width="72" height="2.5" fill="#C9A84C" opacity=".9"/>
+            <rect x="8" y="68" width="72" height="2.5" fill="#9B7B8C" opacity=".7" rx="1"/>
+            <text x="44" y="52" text-anchor="middle" fill="#C9A84C" font-size="7.5" font-weight="500" font-family="Outfit,sans-serif" letter-spacing="3">ORKA</text>
+            <text x="44" y="100" text-anchor="middle" fill="#F5F0E8" font-size="13" font-weight="500" font-family="Outfit,sans-serif" letter-spacing="2">CALM</text>
+            <text x="44" y="115" text-anchor="middle" fill="#7A7060" font-size="5.5" font-family="Outfit,sans-serif" letter-spacing="1">ASHWAGANDHA &amp; FIG</text>
+            <circle cx="44" cy="135" r="5" fill="none" stroke="#C9A84C" stroke-width=".8" opacity=".5"/>
+            <circle cx="44" cy="135" r="2.5" fill="#C9A84C" opacity=".6"/>
+            <line x1="44" y1="128" x2="44" y2="126" stroke="#C9A84C" stroke-width=".8" opacity=".4"/>
+            <line x1="44" y1="142" x2="44" y2="144" stroke="#C9A84C" stroke-width=".8" opacity=".4"/>
+            <line x1="37" y1="135" x2="35" y2="135" stroke="#C9A84C" stroke-width=".8" opacity=".4"/>
+            <line x1="51" y1="135" x2="53" y2="135" stroke="#C9A84C" stroke-width=".8" opacity=".4"/>
+            <defs><linearGradient id="sc" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="white" stop-opacity=".8"/><stop offset="100%" stop-color="white" stop-opacity="0"/></linearGradient></defs>
+          </svg>
+        </div>
+        <p class="p-fn">Calm</p>
+        <h3 class="p-nm">Ashwagandha &amp; Fig</h3>
+        <p class="p-fl">Stone Fruit / Warm</p>
+        <p class="p-desc">Stress support, softened with deep stone fruit warmth. Grounding without sedation.</p>
+        <div class="p-ft"><span class="p-price">£6.50</span><button class="p-cta">Add to Bag →</button></div>
+      </article>
+
+      <!-- RESTORE -->
+      <article class="p-card" data-glow>
+        <div class="can-wrap">
+          <svg width="88" height="176" viewBox="0 0 88 176" fill="none" style="transition:filter .3s;">
+            <rect x="8" y="24" width="72" height="128" rx="5" fill="#111008"/>
+            <rect x="8" y="24" width="18" height="128" rx="5" fill="url(#sr)" opacity=".12"/>
+            <ellipse cx="44" cy="24" rx="36" ry="8" fill="#1e1b12"/>
+            <ellipse cx="44" cy="152" rx="36" ry="8" fill="#1e1b12"/>
+            <rect x="8" y="24" width="72" height="2.5" fill="#C9A84C" opacity=".9"/>
+            <rect x="8" y="149.5" width="72" height="2.5" fill="#C9A84C" opacity=".9"/>
+            <rect x="8" y="68" width="72" height="2.5" fill="#7B1D30" opacity=".9" rx="1"/>
+            <text x="44" y="52" text-anchor="middle" fill="#C9A84C" font-size="7.5" font-weight="500" font-family="Outfit,sans-serif" letter-spacing="3">ORKA</text>
+            <text x="44" y="100" text-anchor="middle" fill="#F5F0E8" font-size="12" font-weight="500" font-family="Outfit,sans-serif" letter-spacing="2">RESTORE</text>
+            <text x="44" y="115" text-anchor="middle" fill="#7A7060" font-size="5.5" font-family="Outfit,sans-serif" letter-spacing="1">REISHI &amp; DARK CHERRY</text>
+            <circle cx="44" cy="135" r="5" fill="none" stroke="#C9A84C" stroke-width=".8" opacity=".5"/>
+            <circle cx="44" cy="135" r="2.5" fill="#C9A84C" opacity=".6"/>
+            <line x1="44" y1="128" x2="44" y2="126" stroke="#C9A84C" stroke-width=".8" opacity=".4"/>
+            <line x1="44" y1="142" x2="44" y2="144" stroke="#C9A84C" stroke-width=".8" opacity=".4"/>
+            <line x1="37" y1="135" x2="35" y2="135" stroke="#C9A84C" stroke-width=".8" opacity=".4"/>
+            <line x1="51" y1="135" x2="53" y2="135" stroke="#C9A84C" stroke-width=".8" opacity=".4"/>
+            <defs><linearGradient id="sr" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="white" stop-opacity=".8"/><stop offset="100%" stop-color="white" stop-opacity="0"/></linearGradient></defs>
+          </svg>
+        </div>
+        <p class="p-fn">Restore</p>
+        <h3 class="p-nm">Reishi &amp; Dark Cherry</h3>
+        <p class="p-fl">Rich / Complex</p>
+        <p class="p-desc">Immune support and recovery. Rich, earthy, complex — for the end of a hard day.</p>
+        <div class="p-ft"><span class="p-price">£6.50</span><button class="p-cta">Add to Bag →</button></div>
+      </article>
+
+      <!-- ENERGY -->
+      <article class="p-card" data-glow>
+        <div class="can-wrap">
+          <svg width="88" height="176" viewBox="0 0 88 176" fill="none" style="transition:filter .3s;">
+            <rect x="8" y="24" width="72" height="128" rx="5" fill="#111008"/>
+            <rect x="8" y="24" width="18" height="128" rx="5" fill="url(#se)" opacity=".12"/>
+            <ellipse cx="44" cy="24" rx="36" ry="8" fill="#1e1b12"/>
+            <ellipse cx="44" cy="152" rx="36" ry="8" fill="#1e1b12"/>
+            <rect x="8" y="24" width="72" height="2.5" fill="#C9A84C" opacity=".9"/>
+            <rect x="8" y="149.5" width="72" height="2.5" fill="#C9A84C" opacity=".9"/>
+            <rect x="8" y="68" width="72" height="2.5" fill="#C97A2C" opacity=".8" rx="1"/>
+            <text x="44" y="52" text-anchor="middle" fill="#C9A84C" font-size="7.5" font-weight="500" font-family="Outfit,sans-serif" letter-spacing="3">ORKA</text>
+            <text x="44" y="100" text-anchor="middle" fill="#F5F0E8" font-size="12" font-weight="500" font-family="Outfit,sans-serif" letter-spacing="2">ENERGY</text>
+            <text x="44" y="115" text-anchor="middle" fill="#7A7060" font-size="5.5" font-family="Outfit,sans-serif" letter-spacing="1">CORDYCEPS &amp; GINGER</text>
+            <circle cx="44" cy="135" r="5" fill="none" stroke="#C9A84C" stroke-width=".8" opacity=".5"/>
+            <circle cx="44" cy="135" r="2.5" fill="#C9A84C" opacity=".6"/>
+            <line x1="44" y1="128" x2="44" y2="126" stroke="#C9A84C" stroke-width=".8" opacity=".4"/>
+            <line x1="44" y1="142" x2="44" y2="144" stroke="#C9A84C" stroke-width=".8" opacity=".4"/>
+            <line x1="37" y1="135" x2="35" y2="135" stroke="#C9A84C" stroke-width=".8" opacity=".4"/>
+            <line x1="51" y1="135" x2="53" y2="135" stroke="#C9A84C" stroke-width=".8" opacity=".4"/>
+            <defs><linearGradient id="se" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="white" stop-opacity=".8"/><stop offset="100%" stop-color="white" stop-opacity="0"/></linearGradient></defs>
+          </svg>
+        </div>
+        <p class="p-fn">Energy</p>
+        <h3 class="p-nm">Cordyceps &amp; Ginger</h3>
+        <p class="p-fl">Spiced / Clean</p>
+        <p class="p-desc">Natural endurance. A clean lift without the crash. Warming and invigorating.</p>
+        <div class="p-ft"><span class="p-price">£6.50</span><button class="p-cta">Add to Bag →</button></div>
+      </article>
+
+    </div>
+
+    <div style="margin-top:40px; display:flex; justify-content:center;">
+      <a href="#" class="btn-gold" style="padding:14px 32px;">
+        View Full Range
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ OUR STORY ════════════════════════════════════════════════ -->
+<section id="story" class="about-sec grain">
+  <div class="about-glow" aria-hidden="true"></div>
+  <div class="about-grid">
+    <div>
+      <p class="sec-label">Why Orka Exists</p>
+      <h2 class="about-h2">The wellness<br>market is full<br>of noise.</h2>
+      <p class="about-ed">We exist to cut through it.</p>
+      <p class="about-p">Vague claims. Synthetic ingredients. Packaging designed to look healthy rather than be healthy. Orka is different — every ingredient is single-origin, traceable to farm level, and formulated with a specific function in mind.</p>
+      <p class="about-p">What you drink should work as hard as you do. Luxury and function are not a contradiction.</p>
+      <div class="stats">
+        <div class="stat"><p class="stat-n">4</p><p class="stat-l">Functional variants</p></div>
+        <div class="stat"><p class="stat-n">0g</p><p class="stat-l">Refined sugar</p></div>
+        <div class="stat"><p class="stat-n">100%</p><p class="stat-l">Certified organic</p></div>
+        <div class="stat"><p class="stat-n">1</p><p class="stat-l">Adaptogen per formula</p></div>
+      </div>
+    </div>
+
+    <div class="logo-panel">
+      <div class="c c-tl"></div><div class="c c-tr"></div>
+      <div class="c c-bl"></div><div class="c c-br"></div>
+      <div style="position:absolute;inset:44px;border:1px solid rgba(201,168,76,.05);pointer-events:none;"></div>
+      <img src="brand_assets/Gemini_Generated_Image_i29afui29afui29a.png" alt="Orka logomark">
+      <div class="pull-q"><p>"Every ingredient earns its place."</p></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ THE SCIENCE ══════════════════════════════════════════════ -->
+<section id="science" class="sci-sec">
+  <div class="sci-inner">
+    <div class="sci-hdr">
+      <p class="sec-label">Formulated with intent</p>
+      <h2 class="sec-title">What makes Orka different.</h2>
+    </div>
+    <div class="sci-grid">
+      <div class="pillar">
+        <div class="p-icon">
+          <svg width="18" height="18" fill="none" stroke="#C9A84C" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
+        <h3 class="p-title">Single-Origin</h3>
+        <p class="p-body">Every adaptogen is sourced from a single certified farm. You can trace what's in your can to the exact origin — no blended supply chains, no opacity.</p>
+      </div>
+      <div class="pillar">
+        <div class="p-icon">
+          <svg width="18" height="18" fill="none" stroke="#C9A84C" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+        </div>
+        <h3 class="p-title">Cold-Pressed</h3>
+        <p class="p-body">Cold-pressing preserves the active compounds that heat-processing destroys. We don't take shortcuts in the process — it shows in the function.</p>
+      </div>
+      <div class="pillar">
+        <div class="p-icon">
+          <svg width="18" height="18" fill="none" stroke="#C9A84C" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <h3 class="p-title">No Fillers</h3>
+        <p class="p-body">No refined sugar. No synthetic fillers. No vague functional claims. Every ingredient in every formula earns its place on the label.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ CERTIFICATIONS ══════════════════════════════════════════ -->
+<div class="cert-sec">
+  <div class="cert-inner">
+    <div class="badge">
+      <div class="b-icon"><svg width="16" height="16" fill="none" stroke="#C9A84C" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+      <span class="b-lbl">No Refined Sugar</span>
+    </div>
+    <div class="badge">
+      <div class="b-icon"><svg width="16" height="16" fill="none" stroke="#C9A84C" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg></div>
+      <span class="b-lbl">Single-Origin</span>
+    </div>
+    <div class="badge">
+      <div class="b-icon"><svg width="16" height="16" fill="none" stroke="#C9A84C" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg></div>
+      <span class="b-lbl">Certified Organic</span>
+    </div>
+    <div class="badge">
+      <div class="b-icon"><svg width="16" height="16" fill="none" stroke="#C9A84C" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div>
+      <span class="b-lbl">Vegan</span>
+    </div>
+    <div class="badge">
+      <div class="b-icon"><svg width="16" height="16" fill="none" stroke="#C9A84C" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.618 5.984A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
+      <span class="b-lbl">Gluten-Free</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ BOTTOM CTA ════════════════════════════════════════════════ -->
+<section class="bcta grain">
+  <div class="bcta-glow" aria-hidden="true"></div>
+  <div class="bcta-inner">
+    <img src="brand_assets/Gemini_Generated_Image_i29afui29afui29a.png" alt="Orka" class="bcta-logo">
+    <h2 class="bcta-h">Formulated for people<br>who read the label.</h2>
+    <p class="bcta-sub">Start with one. Collect all four.</p>
+    <a href="#range" class="btn-gold" style="padding:16px 40px; font-size:12px;">
+      Shop the Range
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+    </a>
+  </div>
+</section>
+
+
+<!-- ══ FOOTER ════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="foot-inner">
+    <div class="foot-top">
+      <a href="#" aria-label="Orka home">
+        <img src="brand_assets/Gemini_Generated_Image_i29afui29afui29a.png" alt="Orka" style="height:32px;width:auto;opacity:.5;transition:opacity .2s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='.5'">
+      </a>
+      <ul class="foot-nav">
+        <li><a href="#range">The Range</a></li>
+        <li><a href="#story">Our Story</a></li>
+        <li><a href="#science">The Science</a></li>
+        <li><a href="#">Stockists</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+      <p class="foot-tag">Every ingredient earns its place.</p>
+    </div>
+    <div class="foot-btm">
+      <p class="foot-copy">© 2025 Orka Drinks Ltd. All rights reserved.</p>
+      <ul class="foot-legal">
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Sustainability</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.borderBottomColor = window.scrollY > 40
+      ? 'rgba(201,168,76,.14)'
+      : 'rgba(201,168,76,.08)';
+  }, { passive: true });
+</script>
+</body>
+</html>
