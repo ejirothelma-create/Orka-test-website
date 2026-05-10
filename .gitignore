@@ -5,6 +5,11 @@
 *.mov
 *.zip
 
+# Node
+node_modules/
+.env.local
+.env
+
 # OS files
 .DS_Store
 Thumbs.db

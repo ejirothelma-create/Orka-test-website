@@ -7,6 +7,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+  <!-- ElevenLabs Conversational AI Widget -->
+  <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+  <style>
+    elevenlabs-convai { position: fixed; bottom: 28px; right: 28px; z-index: 9999; }
+    elevenlabs-convai::part(button) {
+      background-color: #C9A84C !important;
+      color: #0E0C07 !important;
+      box-shadow: 0 4px 24px rgba(201,168,76,.35), 0 2px 8px rgba(0,0,0,.4) !important;
+    }
+    elevenlabs-convai::part(button):hover { background-color: #d9ba62 !important; }
+  </style>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; border: 0; font: inherit; vertical-align: baseline; }
     html { scroll-behavior: smooth; }
@@ -917,5 +928,9 @@
     if (e.key === 'Escape') { closeContact(); closeCart(); }
   });
 </script>
+<!-- ══ ARIA VOICE AGENT ══════════════════════════════════════ -->
+<!-- Replace PASTE_AGENT_ID_HERE with your ElevenLabs Agent ID -->
+<elevenlabs-convai agent-id="agent_9801kr9wrxp8exg8ja85kgr95jkd"></elevenlabs-convai>
+
 </body>
 </html>
