@@ -17,6 +17,9 @@
       box-shadow: 0 4px 24px rgba(201,168,76,.35), 0 2px 8px rgba(0,0,0,.4) !important;
     }
     elevenlabs-convai::part(button):hover { background-color: #d9ba62 !important; }
+    @media(max-width:640px){
+      elevenlabs-convai { bottom: 84px; right: 16px; }
+    }
   </style>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; border: 0; font: inherit; vertical-align: baseline; }
@@ -275,13 +278,13 @@
 
     /* ── RESPONSIVE ── */
     @media(max-width:900px){
-      .nav-inner { padding:0 24px; }
+      .nav-inner { padding:0 20px; }
       .nav-links { display:none; }
       .hero-body { padding:96px 24px 72px; margin-left:0; max-width:100%; }
       .range-sec { padding:64px 24px 80px; }
       .range-grid { grid-template-columns:1fr 1fr; }
       .about-sec { padding:64px 24px; }
-      .about-grid { grid-template-columns:1fr; gap:56px; }
+      .about-grid { grid-template-columns:1fr; gap:48px; }
       .logo-panel { display:none; }
       .sci-sec { padding:64px 24px; }
       .sci-grid { grid-template-columns:1fr; }
@@ -292,9 +295,55 @@
       .foot-top { flex-direction:column; align-items:flex-start; }
       .foot-btm { flex-direction:column; align-items:flex-start; }
     }
-    @media(max-width:560px){
+    @media(max-width:640px){
+      /* Nav — hide text buttons, keep only cart on small screens */
+      .nav-inner { padding:0 16px; height:60px; }
+      .nav-actions .btn-gold,
+      .nav-actions .btn-ghost { display:none; }
+
+      /* Hero */
+      .hero-body { padding:80px 20px 56px; }
+      .hero-desc { font-size:14px; }
+      .cta-row { gap:10px; margin-bottom:40px; }
+      .cta-row .btn-gold,
+      .cta-row .btn-ghost { padding:12px 20px; font-size:11px; }
+      .cert-row { gap:16px; }
+
+      /* Range cards */
+      .range-sec { padding:48px 16px 64px; }
       .range-grid { grid-template-columns:1fr; }
-      .cert-inner { grid-template-columns:repeat(2,1fr); }
+      .p-card { padding:28px 20px; }
+      .can-wrap { height:140px; margin-bottom:20px; }
+
+      /* About */
+      .about-sec { padding:48px 16px; }
+      .stats { grid-template-columns:1fr 1fr; gap:0; }
+
+      /* Science */
+      .sci-sec { padding:48px 16px; }
+      .sci-hdr { margin-bottom:36px; }
+      .pillar { padding:28px 20px; }
+
+      /* Cert strip */
+      .cert-sec { padding:32px 16px; }
+      .cert-inner { grid-template-columns:repeat(2,1fr); gap:20px; }
+
+      /* Bottom CTA */
+      .bcta { padding:72px 20px; }
+      .bcta-h { font-size:clamp(1.5rem,7vw,2rem); }
+
+      /* Footer */
+      .footer { padding:32px 16px 24px; }
+      .foot-nav { gap:16px; }
+      .foot-tag { display:none; }
+
+      /* Modal — full width on mobile */
+      .modal-panel { padding:32px 20px; }
+    }
+    @media(max-width:400px){
+      .range-grid { grid-template-columns:1fr; }
+      .cert-inner { grid-template-columns:1fr 1fr; }
+      .stats { grid-template-columns:1fr 1fr; }
     }
 
     /* ── CART BADGE ── */
