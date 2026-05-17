@@ -10,16 +10,12 @@
   <!-- ElevenLabs Conversational AI Widget -->
   <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
   <style>
-    elevenlabs-convai { position: fixed; bottom: 28px; right: 28px; z-index: 9999; }
     elevenlabs-convai::part(button) {
       background-color: #C9A84C !important;
       color: #0E0C07 !important;
       box-shadow: 0 4px 24px rgba(201,168,76,.35), 0 2px 8px rgba(0,0,0,.4) !important;
     }
     elevenlabs-convai::part(button):hover { background-color: #d9ba62 !important; }
-    @media(max-width:640px){
-      elevenlabs-convai { bottom: 84px; right: 16px; }
-    }
   </style>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; border: 0; font: inherit; vertical-align: baseline; }
@@ -296,10 +292,9 @@
       .foot-btm { flex-direction:column; align-items:flex-start; }
     }
     @media(max-width:640px){
-      /* Nav — hide text buttons, keep only cart on small screens */
+      /* Nav — hide Shop the Range link, keep Contact Us button and cart */
       .nav-inner { padding:0 16px; height:60px; }
-      .nav-actions .btn-gold,
-      .nav-actions .btn-ghost { display:none; }
+      .nav-actions a.btn-gold { display:none; }
 
       /* Hero */
       .hero-body { padding:80px 20px 56px; }
@@ -458,6 +453,44 @@
     .cart-total-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
     .cart-total-label { font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#7A7060; }
     .cart-total-amount { font-size:16px; font-weight:500; color:#F5F0E8; }
+
+    /* ── ARIA WIDGET CONTAINER ── */
+    #aria-widget-container { position:fixed; bottom:28px; right:28px; z-index:9999; }
+    #aria-close-btn {
+      position:absolute; top:-10px; right:-10px; z-index:1;
+      width:22px; height:22px; border-radius:50%;
+      background:#2A2418; border:1px solid rgba(201,168,76,.45);
+      color:#C9A84C; font-size:13px; line-height:1; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:background .2s, border-color .2s;
+    }
+    #aria-close-btn:hover { background:#C9A84C; color:#0E0C07; border-color:#C9A84C; }
+    @media(max-width:640px){ #aria-widget-container { bottom:84px; right:16px; } }
+
+    /* ── CHECKOUT MODAL ── */
+    .checkout-summary {
+      border:1px solid rgba(201,168,76,.1); padding:16px; margin-bottom:24px;
+    }
+    .checkout-summary-row {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:8px 0; border-bottom:1px solid rgba(201,168,76,.06);
+      font-size:13px; color:#7A7060;
+    }
+    .checkout-summary-row span:last-child { color:#F5F0E8; }
+    .checkout-summary-total {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:12px 0 0; font-size:14px; font-weight:500; color:#F5F0E8;
+    }
+    .checkout-step { display:none; }
+    .checkout-step.active { display:block; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .checkout-success { text-align:center; padding:16px 0; }
+    .order-ref {
+      font-size:22px; font-weight:500; letter-spacing:.12em;
+      color:#C9A84C; margin:16px 0 8px; font-family:'Outfit',Arial,sans-serif;
+    }
+    .checkout-success p { font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:#7A7060; line-height:1.8; }
+    @media(max-width:640px){ .form-row { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
@@ -873,7 +906,7 @@
         <span class="cart-total-label">Total</span>
         <span class="cart-total-amount" id="cart-total">£0.00</span>
       </div>
-      <button class="btn-gold" style="width:100%; justify-content:center; padding:14px;">
+      <button class="btn-gold" style="width:100%; justify-content:center; padding:14px;" onclick="openCheckout()">
         Checkout
         <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
       </button>
@@ -973,13 +1006,112 @@
     document.body.style.overflow = '';
   }
 
+  // ── Aria Widget ──
+  function closeAria() {
+    document.getElementById('aria-widget-container').style.display = 'none';
+  }
+
+  // ── Checkout ──
+  function openCheckout() {
+    const items = Object.values(cart);
+    if (items.length === 0) return;
+
+    const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
+    const summaryEl = document.getElementById('checkout-summary');
+    summaryEl.innerHTML = items.map(i =>
+      `<div class="checkout-summary-row"><span>${i.name} × ${i.qty}</span><span>£${(i.price * i.qty).toFixed(2)}</span></div>`
+    ).join('') +
+    `<div class="checkout-summary-total"><span>Total</span><span>£${total.toFixed(2)}</span></div>`;
+
+    document.getElementById('checkout-step-1').classList.add('active');
+    document.getElementById('checkout-step-2').classList.remove('active');
+    document.getElementById('checkout-form').reset();
+    closeCart();
+    document.getElementById('checkout-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCheckout() {
+    document.getElementById('checkout-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function submitCheckout(e) {
+    e.preventDefault();
+    const orderNum = 'ORK-' + String(Math.floor(Math.random() * 90000) + 10000);
+    document.getElementById('order-ref-display').textContent = orderNum;
+    document.getElementById('checkout-step-1').classList.remove('active');
+    document.getElementById('checkout-step-2').classList.add('active');
+    Object.keys(cart).forEach(k => delete cart[k]);
+    updateCartUI();
+  }
+
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeContact(); closeCart(); }
+    if (e.key === 'Escape') { closeContact(); closeCart(); closeCheckout(); }
   });
 </script>
+<!-- ══ CHECKOUT MODAL ════════════════════════════════════════ -->
+<div id="checkout-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Checkout">
+  <div class="modal-overlay" onclick="closeCheckout()"></div>
+  <div class="modal-panel">
+    <button class="modal-close" onclick="closeCheckout()" aria-label="Close">✕</button>
+
+    <!-- Step 1: Shipping -->
+    <div class="checkout-step active" id="checkout-step-1">
+      <p class="modal-eyebrow">Almost There</p>
+      <h2 class="modal-h">Your Order</h2>
+      <div class="checkout-summary" id="checkout-summary"></div>
+      <form id="checkout-form" onsubmit="submitCheckout(event)">
+        <div class="form-row">
+          <div class="form-field">
+            <label for="co-name">Full Name</label>
+            <input id="co-name" type="text" placeholder="Jane Smith" required>
+          </div>
+          <div class="form-field">
+            <label for="co-email">Email</label>
+            <input id="co-email" type="email" placeholder="jane@email.com" required>
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="co-addr">Address</label>
+          <input id="co-addr" type="text" placeholder="12 Example Street" required>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="co-city">City</label>
+            <input id="co-city" type="text" placeholder="London" required>
+          </div>
+          <div class="form-field">
+            <label for="co-post">Postcode</label>
+            <input id="co-post" type="text" placeholder="SW1A 1AA" required>
+          </div>
+        </div>
+        <button type="submit" class="btn-gold" style="width:100%; justify-content:center; padding:14px; margin-top:8px;">
+          Place Order
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </button>
+      </form>
+    </div>
+
+    <!-- Step 2: Confirmation -->
+    <div class="checkout-step" id="checkout-step-2">
+      <div class="checkout-success">
+        <div class="form-success-icon" style="margin-bottom:20px;">
+          <svg width="22" height="22" fill="none" stroke="#C9A84C" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <p style="font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:#C9A84C; margin-bottom:8px;">Order Confirmed</p>
+        <div class="order-ref" id="order-ref-display"></div>
+        <p>Thank you for your order.<br>A confirmation has been sent to your email.<br>Estimated delivery: 3–5 working days.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ══ ARIA VOICE AGENT ══════════════════════════════════════ -->
-<!-- Replace PASTE_AGENT_ID_HERE with your ElevenLabs Agent ID -->
-<elevenlabs-convai agent-id="agent_9801kr9wrxp8exg8ja85kgr95jkd"></elevenlabs-convai>
+<div id="aria-widget-container">
+  <button id="aria-close-btn" onclick="closeAria()" aria-label="Hide voice assistant">✕</button>
+  <elevenlabs-convai agent-id="agent_9801kr9wrxp8exg8ja85kgr95jkd"></elevenlabs-convai>
+</div>
 
 </body>
 </html>
