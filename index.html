@@ -1036,18 +1036,56 @@
     document.body.style.overflow = '';
   }
 
-  function submitCheckout(e) {
+  async function submitCheckout(e) {
     e.preventDefault();
-    const orderNum = 'ORK-' + String(Math.floor(Math.random() * 90000) + 10000);
-    document.getElementById('order-ref-display').textContent = orderNum;
-    document.getElementById('checkout-step-1').classList.remove('active');
-    document.getElementById('checkout-step-2').classList.add('active');
-    Object.keys(cart).forEach(k => delete cart[k]);
-    updateCartUI();
+    const btn = e.target.querySelector('[type="submit"]');
+    const saved = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = 'Processing…';
+    document.getElementById('checkout-error').style.display = 'none';
+
+    try {
+      const res = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: Object.values(cart).map(i => ({ name: i.name, price: i.price, qty: i.qty })),
+          shipping: {
+            name:     document.getElementById('co-name').value,
+            email:    document.getElementById('co-email').value,
+            address:  document.getElementById('co-addr').value,
+            city:     document.getElementById('co-city').value,
+            postcode: document.getElementById('co-post').value,
+          }
+        })
+      });
+      const data = await res.json();
+      if (data.url) { window.location.href = data.url; return; }
+      throw new Error(data.error || 'Payment could not be initialised.');
+    } catch (err) {
+      btn.disabled = false;
+      btn.innerHTML = saved;
+      const errEl = document.getElementById('checkout-error');
+      errEl.textContent = err.message;
+      errEl.style.display = 'block';
+    }
   }
 
+  function closeSuccess() {
+    document.getElementById('success-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  (function () {
+    if (new URLSearchParams(window.location.search).get('success') === 'true') {
+      history.replaceState({}, '', '/');
+      document.getElementById('success-overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  })();
+
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeContact(); closeCart(); closeCheckout(); }
+    if (e.key === 'Escape') { closeContact(); closeCart(); closeCheckout(); closeSuccess(); }
   });
 </script>
 <!-- ══ CHECKOUT MODAL ════════════════════════════════════════ -->
@@ -1086,8 +1124,9 @@
             <input id="co-post" type="text" placeholder="SW1A 1AA" required>
           </div>
         </div>
+        <p id="checkout-error" style="display:none; font-size:12px; color:#e05c5c; margin:0 0 12px; letter-spacing:.05em;"></p>
         <button type="submit" class="btn-gold" style="width:100%; justify-content:center; padding:14px; margin-top:8px;">
-          Place Order
+          Proceed to Payment
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
         </button>
       </form>
@@ -1104,6 +1143,27 @@
         <p>Thank you for your order.<br>A confirmation has been sent to your email.<br>Estimated delivery: 3–5 working days.</p>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ══ SUCCESS OVERLAY ═══════════════════════════════════════ -->
+<div id="success-overlay" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Order confirmed">
+  <div class="modal-overlay" onclick="closeSuccess()"></div>
+  <div class="modal-panel" style="text-align:center; padding:56px 48px;">
+    <div style="width:64px; height:64px; border:1px solid rgba(201,168,76,.3); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 28px;">
+      <svg width="28" height="28" fill="none" stroke="#C9A84C" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+    </div>
+    <p class="modal-eyebrow" style="margin-bottom:12px;">Payment Successful</p>
+    <h2 class="modal-h" style="margin-bottom:16px;">Order Confirmed</h2>
+    <p style="font-size:14px; color:#7A7060; line-height:1.8; margin-bottom:36px;">
+      Thank you for your order.<br>
+      A confirmation has been sent to your email.<br>
+      Estimated delivery: 3–5 working days.
+    </p>
+    <button class="btn-gold" style="padding:14px 32px;" onclick="closeSuccess()">
+      Continue Shopping
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+    </button>
   </div>
 </div>
 
