@@ -1076,13 +1076,13 @@
     document.body.style.overflow = '';
   }
 
-  (function () {
+  document.addEventListener('DOMContentLoaded', function () {
     if (new URLSearchParams(window.location.search).get('success') === 'true') {
       history.replaceState({}, '', '/');
       document.getElementById('success-overlay').classList.add('open');
       document.body.style.overflow = 'hidden';
     }
-  })();
+  });
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { closeContact(); closeCart(); closeCheckout(); closeSuccess(); }
